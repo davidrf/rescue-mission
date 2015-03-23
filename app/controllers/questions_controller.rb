@@ -23,12 +23,23 @@ class QuestionsController < ApplicationController
   end
 
   def edit
+    @question = Question.find(params[:id])
   end
 
   def update
+    @question = Question.find(params[:id])
+
+    if @question.update(question_params)
+      redirect_to @question, notice: 'Question was successfully edited.'
+    else
+      render :edit
+    end
   end
 
   def destroy
+    @question = Question.find(params[:id])
+    @question.destroy
+    redirect_to questions_url, notice: 'Question was successfully deleted.'
   end
 
   private
