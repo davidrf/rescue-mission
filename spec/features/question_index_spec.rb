@@ -14,10 +14,7 @@ feature 'view all questions', %Q{
     question2 = Question.create(title: "question2" * 40, description: "description" * 150)
     visit questions_path
 
-    # expect(page).to have_selector('ul#meetups li:first-child a', text: "question1" * 40)
-    # expect(page).to have_selector('ul#meetups li:last-child a', text: "question2" * 40)
-
-    expect(page).to have_content("question1")
-    expect(page).to have_content("question2")
+    expect(page).to have_selector('ul li:first-child a', text: "question2" * 40)
+    expect(page).to have_selector('ul li:last-child a', text: "question1" * 40)
   end
 end

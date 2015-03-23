@@ -1,6 +1,6 @@
 class Answer < ActiveRecord::Base
-  belongs_to :answer
+  belongs_to :question
 
-  validates :title, length: { minimum: 50 }
+  validates :description, length: { minimum: 50 }
   validates_presence_of :question
 end
