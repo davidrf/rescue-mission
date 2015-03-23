@@ -1,2 +1,15 @@
-<h1>Questions#index</h1>
-<p>Find me in app/views/questions/index.html.erb</p>
+<div class="row">
+  <div class="large-12">
+    <h1>Questions</h1>
+
+    <%- unless @questions.empty? -%>
+        <%- @questions.each do |question| -%>
+        <ul>
+          <li><%= link_to question.title, question_path(question.id) %></li>
+        </ul>
+        <%- end -%>
+    <%- end -%>
+  </div>
+</div>
+
+<%= link_to "New Question", new_question_path %>

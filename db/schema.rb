@@ -26,8 +26,10 @@ ActiveRecord::Schema.define(version: 20150323163746) do
   add_index "answers", ["question_id"], name: "index_answers_on_question_id", using: :btree
 
   create_table "questions", force: :cascade do |t|
-    t.string "title",       null: false
-    t.string "description", null: false
+    t.string   "title",       null: false
+    t.string   "description", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "questions", ["title"], name: "index_questions_on_title", unique: true, using: :btree
