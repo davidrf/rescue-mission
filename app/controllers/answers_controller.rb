@@ -4,9 +4,10 @@ class AnswersController < ApplicationController
     @answer.question_id = params[:question_id]
 
     if @answer.save
-      redirect_to @answer.question, notice: 'Question was successfully created.'
+      redirect_to @answer.question, notice: 'Answer was successfully created.'
     else
-      redirect_to @answer.question
+      @question = Question.find(params[:question_id])
+      render "questions/show"
     end
   end
 

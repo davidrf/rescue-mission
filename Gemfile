@@ -41,6 +41,13 @@ group :development, :test do
   gem 'spring'
 end
 
+gem 'redcarpet'
+gem 'rouge'
+gem 'sanitize'
+
+gem 'redcarpet', group: [:development, :test]
+gem 'rouge', group: [:development, :test]
+gem 'sanitize', group: [:development, :test]
 gem 'rspec-rails', group: [:development, :test]
 gem 'capybara', group: [:development, :test]
 gem 'pry', group: [:development, :test]
