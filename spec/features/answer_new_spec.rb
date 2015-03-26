@@ -11,11 +11,10 @@ feature 'post an answer', %Q{
   # * I must be presented with errors if I fill out the form incorrectly
 
   scenario 'post an answer' do
-    question = Question.create(title: "question" * 40, description: "description" * 150)
-    answer = Answer.new(description: "description" * 50, question_id: question.id)
+    answer = FactoryGirl.create(:answer)
 
     visit questions_path
-    click_link question.title
+    click_link answer.question.title
 
     fill_in 'Description', with: answer.description
     click_button "Submit Answer"

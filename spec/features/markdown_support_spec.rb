@@ -25,7 +25,7 @@ feature 'post a questions', %Q{
 
   scenario 'post an answer with markdown' do
     description = 'description' * 50
-    question = Question.create(title: "question" * 40, description: "description" * 150)
+    question = FactoryGirl.create(:question)
     answer = Answer.new(description: "**#{description}**", question_id: question.id)
 
     visit questions_path
