@@ -1,15 +1,34 @@
 require 'rails_helper'
 
-feature 'view question details', %Q{
+feature 'user deletes a question', %Q{
   As a user
   I want to delete a question
   So that I can delete duplicate questions
 } do
   # Acceptance Criteria
+  # * I must be signed in
+  # * I must be able to delete a question that I posted
+  # * I can't delete a question that was posted by another user
   # * I must be able delete a question from the question edit page
   # * I must be able delete a question from the question details page
   # * All answers associated with the question must also be deleted
-  scenario 'visitor deletes question from details page' do
+
+  let(:user) { FactoryGirl.create(:user) }
+
+  before :each do
+    OmniAuth.config.mock_auth[:github] = {
+      "provider" => user.provider,
+      "uid" => user.uid,
+      "info" => {
+        "nickname" => user.username,
+        "email" => user.email,
+        "name" => user.name
+      }
+    }
+
+  end
+
+  scenario 'user deletes question from details page' do
     question = Question.create(title: "question" * 40, description: "description" * 150)
     answer = Answer.create(description: "description" * 150, question_id: question.id)
 

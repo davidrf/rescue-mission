@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'post a questions', %Q{
+feature 'user signs in', %Q{
   As a user
   I want to sign in
   So that my questions and answers can be associated to me

@@ -9,6 +9,23 @@ feature 'best answer chosen', %Q{
   # * I must be on the question detail page
   # * I must be able mark an answer as the best
   # * I must see the "best" answer above all other answers in the answer list
+  # * I must be signed in
+  # * I must be able to edit a question that I posted
+  # * I can't edit a question that was posted by another user
+
+  let(:user) { FactoryGirl.create(:user) }
+
+  before :each do
+    OmniAuth.config.mock_auth[:github] = {
+      "provider" => user.provider,
+      "uid" => user.uid,
+      "info" => {
+        "nickname" => user.username,
+        "email" => user.email,
+        "name" => user.name
+      }
+    }
+  end
 
   scenario 'post an answer' do
     answer = FactoryGirl.create(:answer)

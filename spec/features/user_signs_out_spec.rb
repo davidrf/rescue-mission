@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'post a questions', %Q{
+feature 'user signs outs', %Q{
   As a user
   I want to be able to sign out
   So that other users of my computer can't pretend to be me

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'post a questions', %Q{
+feature 'post questions and answers with markdown', %Q{
   As a user
   I want to write my questions and answers with markdown
   So I can easily format my questions and answers
