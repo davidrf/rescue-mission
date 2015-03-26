@@ -28,30 +28,54 @@ feature 'user deletes a question', %Q{
 
   end
 
-  scenario 'user deletes question from details page' do
-    question = Question.create(title: "question" * 40, description: "description" * 150)
-    answer = Answer.create(description: "description" * 150, question_id: question.id)
+  scenario 'question owner deletes question from details page' do
+    question = FactoryGirl.create(:question_with_two_answers, user: user)
 
-    visit questions_path
-    click_link(question.title)
+    visit root_path
+    click_link "Sign In With GitHub"
+    click_link question.title
     click_link 'Delete Question'
 
     expect(page).to have_content('Question was successfully deleted.')
     expect(page).to_not have_content(question.title)
-    expect(Answer.exists?(answer.id)).to be(false)
+    expect(Answer.count).to be(0)
   end
 
-  scenario 'visitor deletes question from edit page' do
-    question = Question.create(title: "question" * 40, description: "description" * 150)
-    answer = Answer.create(description: "description" * 150, question_id: question.id)
+  scenario 'question owner deletes question from edit page' do
+    question = FactoryGirl.create(:question_with_two_answers, user: user)
 
-    visit questions_path
-    click_link(question.title)
+    visit root_path
+    click_link "Sign In With GitHub"
+    click_link question.title
     click_link 'Edit Question'
     click_link 'Delete Question'
 
     expect(page).to have_content('Question was successfully deleted.')
     expect(page).to_not have_content(question.title)
-    expect(Answer.exists?(answer.id)).to be(false)
+    expect(Answer.count).to be(0)
+  end
+
+  scenario 'user not signed in cannot delete question' do
+    question = FactoryGirl.create(:question_with_two_answers, user: user)
+
+    visit root_path
+    click_link question.title
+
+    expect(page).to_not have_link('Edit Question')
+    expect(page).to_not have_link('Delete Question')
+  end
+
+  scenario 'user who is not question owner cannot delete question' do
+    another_user = FactoryGirl.create(:user)
+    question = FactoryGirl.create(:question_with_two_answers,
+      user: another_user
+    )
+
+    visit root_path
+    click_link "Sign In With GitHub"
+    click_link question.title
+
+    expect(page).to_not have_link('Edit Question')
+    expect(page).to_not have_link('Delete Question')
   end
 end

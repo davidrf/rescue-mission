@@ -11,7 +11,7 @@ feature 'post an answer', %Q{
   # * I must be presented with errors if I fill out the form incorrectly
 
   scenario 'post an answer' do
-    answer = FactoryGirl.create(:answer)
+    answer = FactoryGirl.build(:answer)
 
     visit questions_path
     click_link answer.question.title
@@ -24,11 +24,10 @@ feature 'post an answer', %Q{
   end
 
   scenario 'unsuccessfully post an answer that is too short' do
-    question = Question.create(title: "question" * 40, description: "description" * 150)
-    answer = Answer.new(description: "description", question_id: question.id)
+    answer = FactoryGirl.build(:answer, description: "too short description")
 
     visit questions_path
-    click_link question.title
+    click_link answer.question.title
 
     fill_in 'Description', with: answer.description
     click_button "Submit Answer"

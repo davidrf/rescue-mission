@@ -13,7 +13,8 @@ feature 'edit a question', %Q{
   # * I must be able to delete a question that I posted
   # * I can't delete a question that was posted by another user
 
-  let(:user) { FactoryGirl.create(:user) }
+  let(:user) { FactoryGirl.create(:user_with_question) }
+  let!(:another_user) { FactoryGirl.create(:user_with_question) }
 
   before :each do
     OmniAuth.config.mock_auth[:github] = {
@@ -30,14 +31,10 @@ feature 'edit a question', %Q{
   scenario 'edit a question' do
     visit root_path
     click_link "Sign In With GitHub"
-    question = Question.create(title: "question" * 40, description: "description" * 150)
-
-    visit questions_path
-    click_link question.title
+    click_link user.questions.first.title
     click_link "Edit Question"
-
-    fill_in 'Title', with: question.title
-    fill_in 'Description', with: question.description
+    fill_in 'Title', with: "d" * 40
+    fill_in 'Description', with: "e" * 150
     click_button "Submit Question"
 
     expect(page).to have_content('Question was successfully edited.')
@@ -46,14 +43,10 @@ feature 'edit a question', %Q{
   scenario 'unsuccessfully edit a question with too short a title' do
     visit root_path
     click_link "Sign In With GitHub"
-    question = Question.create(title: "question" * 40 , description: "description" * 150)
-
-    visit questions_path
-    click_link question.title
+    click_link user.questions.first.title
     click_link "Edit Question"
-
-    fill_in 'Title', with: "question"
-    fill_in 'Description', with: question.description
+    fill_in 'Title', with: "d" * 39
+    fill_in 'Description', with: "e" * 150
     click_button "Submit Question"
 
     expect(page).to have_content("Title is too short (minimum is 40 characters)")
@@ -62,16 +55,25 @@ feature 'edit a question', %Q{
   scenario 'unsuccessfully edit a question with too short a description' do
     visit root_path
     click_link "Sign In With GitHub"
-    question = Question.create(title: "question" * 40, description: "description" * 40)
-
-    visit questions_path
-    click_link question.title
+    click_link user.questions.first.title
     click_link "Edit Question"
-
-    fill_in 'Title', with: question.title
-    fill_in 'Description', with: "description"
+    fill_in 'Title', with: "d" * 40
+    fill_in 'Description', with: "e" * 149
     click_button "Submit Question"
 
     expect(page).to have_content("Description is too short (minimum is 150 characters)")
+  end
+
+  scenario 'user who is not question owner cannot edit question' do
+    another_user = FactoryGirl.create(:user)
+    question = FactoryGirl.create(:question_with_two_answers,
+      user: another_user
+    )
+
+    visit root_path
+    click_link "Sign In With GitHub"
+    click_link question.title
+
+    expect(page).to_not have_link('Edit Question')
   end
 end

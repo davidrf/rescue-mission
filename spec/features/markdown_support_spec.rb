@@ -9,11 +9,28 @@ feature 'post questions and answers with markdown', %Q{
   # * I can write my questions and answers using markdown syntax
   # * Questions and answers, when shown, should be the HTML rendered from the markdown
 
+  let(:user) { FactoryGirl.create(:user) }
+
+  before :each do
+    OmniAuth.config.mock_auth[:github] = {
+      "provider" => user.provider,
+      "uid" => user.uid,
+      "info" => {
+        "nickname" => user.username,
+        "email" => user.email,
+        "name" => user.name
+      }
+    }
+  end
+
   scenario 'post a question with markdown' do
     description = 'description' * 150
-    question = Question.new(title: 'question' * 40, description: "**#{description}**")
+    markdown_description = "**#{description}**"
+    question = FactoryGirl.build(:question)
+    question.description = markdown_description
 
-    visit questions_path
+    visit root_path
+    click_link "Sign In With GitHub"
     click_link "New Question"
 
     fill_in 'Title', with: question.title
@@ -24,9 +41,10 @@ feature 'post questions and answers with markdown', %Q{
   end
 
   scenario 'post an answer with markdown' do
-    description = 'description' * 50
-    question = FactoryGirl.create(:question)
-    answer = Answer.new(description: "**#{description}**", question_id: question.id)
+    description = 'description' * 150
+    markdown_description = "**#{description}**"
+    question = FactoryGirl.create(:question, user: user)
+    answer = FactoryGirl.build(:answer, description: markdown_description)
 
     visit questions_path
     click_link question.title

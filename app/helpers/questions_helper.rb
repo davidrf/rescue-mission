@@ -12,4 +12,8 @@ module QuestionsHelper
     answers.unshift(best_answer) if best_answer
     answers
   end
+
+  def owner_of?(question_object)
+    session[:user_id] == question_object.user_id
+  end
 end

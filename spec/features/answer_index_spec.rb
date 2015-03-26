@@ -10,19 +10,18 @@ feature 'view all answers for a given question', %Q{
   # * I must only see answers to the question I'm viewing
   # * I must see all answers listed in order, most recent last
 
-  scenario 'visitor views all questions in order, most recently posted first' do
-    question1 = Question.create(title: "question1" * 40, description: "description" * 150)
-    question2 = Question.create(title: "question2" * 40, description: "description" * 150)
-    answer1 = Answer.create(description: "answer1" * 50, question_id: question1.id)
-    answer2 = Answer.create(description: "answer2" * 50, question_id: question1.id)
-    answer3 = Answer.create(description: "answer3" * 50, question_id: question2.id)
+  scenario 'view answers for a question in order, most recent first' do
+    question = FactoryGirl.create(:question_with_two_answers)
+    another_question = FactoryGirl.create(:question_with_two_answers)
 
     visit questions_path
-    click_link question1.title
+    click_link question.title
 
-    expect(page).to have_content(answer1.description)
-    expect(page).to have_selector('ul li:first-child', text: answer1.description)
-    expect(page).to have_selector('ul li:last-child', text: answer2.description)
-    expect(page).to_not have_content(answer3.description)
+    expect(page).to have_selector('ul li:first-child',
+      text: question.answers.first.description)
+    expect(page).to have_selector('ul li:last-child',
+      text: question.answers.last.description)
+    expect(page).to_not have_content(another_question.answers.first.description)
+    expect(page).to_not have_content(another_question.answers.last.description)
   end
 end

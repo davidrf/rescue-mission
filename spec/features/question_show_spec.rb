@@ -11,9 +11,9 @@ feature 'view question details', %Q{
   # * I must see the question's description
 
   scenario 'visitor views question details' do
-    question = Question.create(title: "question" * 40, description: "description" * 150)
+    question = FactoryGirl.create(:question)
     visit questions_path
-    click_link(question.title)
+    click_link question.title
 
     expect(page).to have_content(question.title)
     expect(page).to have_content(question.description)

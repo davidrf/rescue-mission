@@ -1,17 +1,11 @@
-<p id="notice"><%= notice %></p>
+<h1>Questions</h1>
 
-<div class="row">
-  <div class="large-12">
-    <h1>Questions</h1>
-
-    <%- unless @questions.empty? -%>
-        <%- @questions.each do |question| -%>
-        <ul>
-          <li><%= link_to question.title, question_path(question) %></li>
-        </ul>
-        <%- end -%>
+<%- unless @questions.empty? -%>
+    <%- @questions.each do |question| -%>
+    <ul>
+      <li><%= link_to question.title, question_path(question) %></li>
+    </ul>
     <%- end -%>
-  </div>
-</div>
+<%- end -%>
 
 <%= link_to "New Question", new_question_path %>
