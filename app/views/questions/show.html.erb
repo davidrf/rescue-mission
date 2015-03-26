@@ -13,8 +13,17 @@
 <h3>Answers</h3>
 
 <ul>
-  <% @question.answers.each do |answer| %>
-    <li><%= render_safe_markdown(answer.description) %></li>
+  <% sort_answers_for(@question).each do |answer| %>
+    <li>
+      <% if answer.best %>
+        <strong>Accepted Answer: </strong>
+      <% end %>
+      <%= render_safe_markdown(answer.description) %>
+      <%= link_to 'Accept Answer', question_answer_path(@question, answer),
+        method: :patch,
+        id: "answer_#{answer.id}"
+      %>
+    </li>
   <% end %>
 </ul>
 

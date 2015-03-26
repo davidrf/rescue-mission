@@ -8,7 +8,21 @@
 </head>
 <body>
 
-<%= yield %>
-
+  <div class="container">
+    <% if flash.any? %>
+      <% flash.each do |key, value| %>
+        <div class="alert alert-<%= key %>"><%= value %></div>
+      <% end %>
+    <% end %>
+    <ul>
+      <% if user_signed_in? %>
+      <li><a href="#"></a>Signed in as <%= current_user.username %></li>
+      <li><%= link_to "Sign Out", session_path, method: :delete %></li>
+      <% else %>
+      <li><%= link_to "Sign In With GitHub", new_session_path %></li>
+      <% end %>
+    </ul>
+    <%= yield %>
+  </div>
 </body>
 </html>

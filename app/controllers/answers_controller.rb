@@ -11,6 +11,14 @@ class AnswersController < ApplicationController
     end
   end
 
+  def update
+    Answer.where(question_id: params[:question_id]).update_all(best: false)
+    Answer.find(params[:id]).update(best: true)
+    @answer = Answer.find(params[:id])
+    @question = Question.find(params[:question_id])
+    redirect_to @question
+  end
+
   private
 
   # Never trust parameters from the scary internet, only allow the white list through.
